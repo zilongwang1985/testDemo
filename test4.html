@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+	</head>
+
+	<body>
+		<form action="http://192.168.203.12:8080/axis/services/Corticon">
+			LBC <br />
+			<input type="text" name="" value="" id="lbc" />
+			<div id="p_lbc"></div>
+
+			<!--<input type="submit" name="" id="" value="実行" />-->
+			<input type="button" name="" id="" value="send" onclick="sendJsonData()" />
+				<input type="button" name="" id="" value="aa" onclick="fun1()" />
+		</form>
+	</body>
+
+
+
+	<script type="text/javascript">
+		function sendJsonData() {
+			var lbc = document.getElementById("lbc").value;
+			//連想配列
+			var json_asocc = {
+				"name":"LBC",
+				"__metadataRoot": {},
+				"Objects": [{
+					"__metadata": {
+						"#type": "LBCチェック用",
+						"#id": "LBCチェック用_id_1"
+					},
+					"LBC": lbc
+				}]
+			}
+
+			//JSONにエンコード
+			var json_text = JSON.stringify(json_asocc);
+
+			//データを送信
+			xhr = new XMLHttpRequest; //インスタンス作成
+			xhr.onload = function() { //レスポンスを受け取った時の処理（非同期）
+				var res = xhr.responseText;
+				if(res.length > 0) alert(res);
+			};
+			xhr.onerror = function() { //エラーが起きた時の処理（非同期）
+				alert("error!");
+			}
+//			xhr.open('post', "http://192.168.203.12:8080/axis/services/Corticon?name=LBC", true); //(1)
+			xhr.open('post', "http://192.168.203.12:8080/axis/corticon/execute", true); //(1)
+			xhr.setRequestHeader('Content-Type', 'application/json;charset=utf-8');
+			xhr.send(json_text); //送信実行
+		}
+	</script>
+
+
+
+</html>
